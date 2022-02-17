@@ -93,7 +93,15 @@ class Command(BaseCommand):
                 editor.check_sub(global_userinfo["id"])
             # Default behavior is to fetch live `global_userinfo`
             else:
-                global_userinfo = editor_global_userinfo(editor.wp_sub)
+                try:
+                    global_userinfo = editor_global_userinfo(editor.wp_sub)
+                except:
+                    logger.exception(
+                        "Couldn't get global_userinfo for {wp_username}".format(
+                            wp_username=editor.wp_username
+                        )
+                    )
+
             if global_userinfo:
                 editor.update_editcount(global_userinfo["editcount"], datetime_override)
                 # Determine editor validity.
